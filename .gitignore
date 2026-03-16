@@ -1,0 +1,30 @@
+# Byte-code files
+*.pyc
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Distribution / build files
+.eggs/
+*.egg
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE specific files
+.idea/  # For PyCharm/IntelliJ
+.vscode/ # For VS Code (consider adding settings.json if it contains sensitive info)
+*.swp   # For Vim
+
+# OS-specific files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# Miscellaneous
+# Logs, databases, etc. that are generated locally
+*.log
+*.sqlite3
+.env # Environment variables file (often contains sensitive data like API keys)
