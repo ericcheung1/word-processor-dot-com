@@ -27,4 +27,5 @@ Thumbs.db # Windows
 # Logs, databases, etc. that are generated locally
 *.log
 *.sqlite3
-.env # Environment variables file (often contains sensitive data like API keys)
+# Environment variables file (often contains sensitive data like API keys)
+.env
