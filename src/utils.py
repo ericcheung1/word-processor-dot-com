@@ -1,4 +1,5 @@
 import praw
+from praw.exceptions import RedditAPIException, InvalidURL
 from dotenv import load_dotenv
 import os
 import json
@@ -10,6 +11,7 @@ def authenticate_reddit():
     Authenticates a reddit instance using 
     information and keys from a .env file.
     """
+
     load_dotenv()
     client_id = os.getenv("client_id")
     client_secret = os.getenv("client_secret")
@@ -25,7 +27,13 @@ def authenticate_reddit():
 def get_comments(reddit_instance, url):
     """
     """
-    submission = reddit_instance.submission(url=url)
+    
+    try:
+        submission = reddit_instance.submission(url=url)
+    except InvalidURL as e:
+        return {"InvalidURL Error": str(e)}
+    except RedditAPIException as e:
+        return {"Reddit API Error": str(e)}
 
     submission.comments.replace_more(limit=5)
     comment_queue = submission.comments[:5]

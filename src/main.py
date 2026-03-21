@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import uvicorn
+from core import orchestrate_pipeline
 
 app = FastAPI()
 
@@ -16,7 +17,8 @@ def home(request: Request):
 
 @app.post("/sentiment-api", response_class=HTMLResponse)
 def sentiment(request: Request, url: str = Form(...)):
-    return HTMLResponse(content=f"<div>Result: No Result Yet Just Testing!</div>")
+    result = orchestrate_pipeline(url)
+    return HTMLResponse(content=f"<div>Result: {result}</div>")
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", port=5000, reload=True)
