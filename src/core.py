@@ -1,4 +1,3 @@
-from utils import authenticate_reddit, get_comments
 import httpx
 
 def format_payload(comments):
@@ -43,19 +42,14 @@ def calculate_final_sentiment(response_json):
             sentiment_count["POSITIVE"]+=1
 
     mean_conf = sentiment_confidence/len(response_json)
-    return {"sentiment_count": sentiment_count,
-            "sentiment_confidence": round(mean_conf, 3)}
+    return [{"sentiment_count": sentiment_count},
+            {"sentiment_confidence": round(mean_conf, 3)},
+            {"sentiment_results": response_json}]
 
-def orchestrate_pipeline(url):
+
+def orchestrate_pipeline(comments):
     """
     """
-
-    reddit = authenticate_reddit()
-
-    comments = get_comments(reddit, url)
-    if isinstance(comments, dict):
-        return comments
-    
     payload = format_payload(comments)
 
     response = call_sentiment_endpoint(payload)
