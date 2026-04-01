@@ -10,7 +10,7 @@ app = FastAPI()
 load_dotenv()
 reddit = authenticate_reddit()
 sentiment_endpoint = connect_sentiment()
-templates = Jinja2Templates(directory="src/templates")
+templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
