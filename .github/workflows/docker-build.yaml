@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: wp-dot-com
+  IMAGE_NAME: ericcheung1/wp-dot-com
 
 jobs:
   build-and-push:
