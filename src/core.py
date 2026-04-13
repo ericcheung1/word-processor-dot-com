@@ -4,27 +4,27 @@ import pandas as pd
 def format_payload(comments):
     """
     """
-    
-    payload = {
-        "user_id": [],
-        "comment_id": [],
-        "comments": []
-    }
-    for comment in comments:
-        payload["user_id"].append(comment["user_id"])
-        payload["comment_id"].append(comment["comment_id"])
-        payload["comments"].append(comment["comment"])
+    if not comments:
+        return {"error": "posts does not contain comments"}
 
-    return payload
+    texts = []
+    for comment in comments:
+        text_entry = {"text": comment["comment"], 
+                      "text_id": comment["user_id"]}
+        texts.append(text_entry)
+
+    return {"texts": texts}
 
 def call_sentiment_endpoint(payload, sentiment_url):
     """
     """
+    if sentiment_url is None:
+        return {"error": "api key cannot be located"}
     
     try:
         response = httpx.post(sentiment_url, json=payload, timeout=60)
     except httpx.ConnectError:
-        return {"error": "connection error"}
+        return {"error": "sentiment api connection error"}
     except httpx.TimeoutException:
         return {"error": "timeout error"}
     
@@ -55,21 +55,25 @@ def orchestrate_pipeline(comments, sentiment_url):
     """
     """
     payload = format_payload(comments)
+    if isinstance(payload, dict) & ("error" in payload):
+            return payload, pd.DataFrame().to_html()
 
     response = call_sentiment_endpoint(payload, sentiment_url)
+    if isinstance(response, dict) & ("error" in response):
+            return response, pd.DataFrame().to_html()
 
     # NOTE: final_result is sentiment count + averaged confidence
-    final_result = calculate_final_sentiment(response)
+    final_result = calculate_final_sentiment(response["sentiment"])
 
-    comments_table = pd.DataFrame(payload)
-    final_result_table = pd.DataFrame(response)
+    comments_table = pd.DataFrame(payload["texts"])
+    final_result_table = pd.DataFrame(response["sentiment"])
 
     # NOTE: merged_results_table is of individual comment sentiment
     merged_results_table = pd.merge(final_result_table, comments_table, 
-                              on="comment_id", how="left").to_html()
+                              on="text_id", how="left")
+    merged_results_table["sentiment_confidence"] = round(merged_results_table["sentiment_confidence"].apply(max) * 100, 2)
+    columns = ["sentiment_classification", "sentiment_confidence", "text"]
+    merged_results_table = merged_results_table[columns]
+    merged_results_table = merged_results_table.to_html()
 
     return final_result, merged_results_table
-
-if __name__ == "__main__":
-    result = orchestrate_pipeline("", "")
-    print(result)

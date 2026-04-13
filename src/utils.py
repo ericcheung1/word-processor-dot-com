@@ -56,10 +56,11 @@ def connect_sentiment():
     """
     """
 
-    sentiment_url = os.getenv("url_prod")
+    sentiment_url = os.getenv("url")
     
     if sentiment_url is None:
-        return "error: failed to load api url"
+        print(f"error: failed to load api url")
+        return None
     else:
         return sentiment_url
 
