@@ -28,9 +28,9 @@ def get_comments(reddit_instance, url):
     try:
         submission = reddit_instance.submission(url=url)
     except InvalidURL:
-        return {"Error": "Invalid URL"}
+        return {"error": "invalid url"}
     except RedditAPIException:
-        return {"Error": "Reddit API"}
+        return {"error": "reddit api"}
 
     submission.comments.replace_more(limit=5)
     comment_queue = submission.comments[:5]

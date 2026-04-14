@@ -23,17 +23,20 @@ def call_sentiment_endpoint(payload, sentiment_url):
     
     try:
         response = httpx.post(sentiment_url, json=payload, timeout=60)
+        if response.status_code == 404:
+            return {"error": "incorrect api url"}
     except httpx.ConnectError:
         return {"error": "sentiment api connection error"}
     except httpx.TimeoutException:
         return {"error": "timeout error"}
+    except httpx.RequestError:
+        return {"error": "request error"}
     
     return response.json()
 
 def calculate_final_sentiment(response_json):
     """
     """
-
     sentiment_count = {"NEGATIVE": 0, "POSITIVE": 0}
     sentiment_confidence = float(0)
 
