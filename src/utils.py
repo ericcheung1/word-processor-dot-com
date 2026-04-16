@@ -46,7 +46,7 @@ def get_comments(reddit_instance, url):
             "comment": str(comment.body),
         })
         count+=1
-        if count >= 5:
+        if count >= 15:
             break
         comment_queue.extend(comment.replies)
 
