@@ -1,6 +1,6 @@
+import logging
 from fastapi import Request, status
 from fastapi.templating import Jinja2Templates
-import logging
 
 logger = logging.getLogger(__name__)
 
