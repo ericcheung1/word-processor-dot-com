@@ -1,8 +1,9 @@
+import logging
+
+import numpy as np
+import onnxruntime as ort
 from pathlib import Path
 from tokenizers import Tokenizer
-import onnxruntime as ort
-import numpy as np
-import logging
 
 logger = logging.getLogger(__name__)
 

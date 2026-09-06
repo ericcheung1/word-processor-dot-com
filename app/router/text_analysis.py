@@ -1,6 +1,8 @@
+import anyio
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+
 from app.clients.reddit import get_comments, process_comments, build_tree
 from app.core.users import (
     clean_model_inputs, 
@@ -10,7 +12,6 @@ from app.core.users import (
     calculate_overall_sentiment
 )
 from ml.sentiment.inference import sentiment_score, softmax
-import anyio
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")

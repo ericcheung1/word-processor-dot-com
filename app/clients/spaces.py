@@ -1,9 +1,10 @@
+import logging
 import os
+from pathlib import Path
+
 import boto3
 from botocore import UNSIGNED
 from botocore.config import Config
-from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 

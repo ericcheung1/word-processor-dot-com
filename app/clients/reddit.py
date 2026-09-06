@@ -1,9 +1,11 @@
+import copy
+import logging
+import os
+
 import asyncpraw
 from asyncpraw.exceptions import RedditAPIException, InvalidURL
 from asyncprawcore.exceptions import NotFound
-import os
-import logging
-import copy
+
 from app.clients.exceptions import CommentFetchingError
 
 logger = logging.getLogger(__name__)
@@ -61,7 +63,7 @@ async def get_comments(reddit, url):
         raise CommentFetchingError(message=f"{str(e)}") from e
 
 
-async def close_reddit(reddit):
+async def close_reddit_client(reddit):
     """Closes connect to AsyncPRAW reddit instance"""
     await reddit.close()
 

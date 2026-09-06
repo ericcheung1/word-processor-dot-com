@@ -1,7 +1,8 @@
-import numpy as np
-import logging
-import json
 import copy
+import json
+import logging
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
