@@ -1,15 +1,16 @@
 import anyio
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app.clients.reddit import get_comments, process_comments, build_tree
+from app.clients.reddit import build_tree, get_comments, process_comments
+# from app.clients.cache import query_from_table, write_to_table
 from app.core.users import (
-    clean_model_inputs, 
-    prepare_model_inputs, 
-    reconcile_outputs, 
-    rebuild_comment_tree, 
-    calculate_overall_sentiment
+    calculate_overall_sentiment,
+    clean_model_inputs,
+    prepare_model_inputs,
+    rebuild_comment_tree,
+    reconcile_outputs
 )
 from ml.sentiment.inference import sentiment_score, softmax
 
@@ -64,7 +65,9 @@ async def reddit_input(request: Request, url: str=Form(...)):
     model_session = request.state.model_session
     tokenizer = request.state.tokenizer
 
-    comments = await get_comments(reddit=reddit, url=url)
+    comments, submission_id = await get_comments(reddit=reddit, url=url)
+
+    # query_from_table(submission_id=submission_id, con="")
 
     # clean comments, preparing for sentiment scoring
     model_inputs = process_comments(comments=comments)

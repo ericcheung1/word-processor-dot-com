@@ -15,8 +15,8 @@ def init_sqlite():
 
         con.execute("""
         CREATE TABLE IF NOT EXISTS cache (
-                key TEXT PRIMARY KEY,
-                value TEXT NOT NULL,
+                submission_id TEXT PRIMARY KEY,
+                comment_tree TEXT NOT NULL,
             )
         """)
         con.commit()
@@ -37,9 +37,17 @@ def close_sqlite(con):
     con.close()
 
 
-def query_table():
-    """Queries table for post, returns if exists"""
-    pass
+def query_from_table(submission_id, con):
+    """Queries table for post"""
+
+    cursor = con.execute("""
+        SELECT comment_tree 
+        FROM cache
+        WHERE submission = ?
+    """, (submission_id,))
+    comment_tree = cursor.fetchone()
+
+    return comment_tree
 
 
 def write_to_table():
